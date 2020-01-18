@@ -18,6 +18,13 @@ android {
     }
 
     buildTypes {
+        debug {
+            minifyEnabled false
+            buildConfigField "String", "BASE_URL", "\"https://api.unsplash.com/\""
+            buildConfigField "String", "PHOTOS_ENDPOINT", "\"/photos@p\""
+            buildConfigField "String", "API_KEY", "\"52ed5e63ad1915fed2bbfd2326aade6b8549b050fc8367a7c105567476df2a81\""
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
@@ -45,9 +52,16 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+
     implementation "androidx.core:core-ktx:$androidXVersion"
     implementation "androidx.appcompat:appcompat:$androidXVersion"
+
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
+    implementation "androidx.recyclerview:recyclerview:$androidXVersion"
+    implementation "androidx.cardview:cardview:$cardViewVersion"
+
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    kapt "com.github.bumptech.glide:compiler:$glideVersion"
 
     implementation "io.reactivex.rxjava2:rxjava:$rxjavaVersion"
     implementation "io.reactivex.rxjava2:rxandroid:$rxandroidVersion"
