@@ -1,32 +1,22 @@
-package dev.khalil.peekture.view.ui
+package dev.khalil.peekture.viewModel
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import dev.khalil.peekture.R
-import dev.khalil.peekture.databinding.ActivityPhotosBinding
-import dev.khalil.peekture.view.adapter.PhotosListAdapter
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 
-class PhotosActivity : AppCompatActivity() {
+class PhotosListViewModel : ViewModel() {
 
+    private val photosLiveData = MutableLiveData<List<String>>()
+    val photos: LiveData<List<String>> = photosLiveData
 
-    private lateinit var binding: ActivityPhotosBinding
-    private val adapter by lazy { PhotosListAdapter() }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_photos)
-
-        initRecyclerView()
+    init {
+        insertPhotos()
     }
 
-    private fun initRecyclerView() {
-        binding.photosRecyclerView.layoutManager =
-            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        adapter.addPhotos(getPhotos())
-        binding.photosRecyclerView.adapter = adapter
+    private fun insertPhotos() {
+        photosLiveData.value = getPhotos()
     }
+
 
     private fun getPhotos(): ArrayList<String> {
         return arrayListOf(
@@ -38,4 +28,5 @@ class PhotosActivity : AppCompatActivity() {
             "https://images.unsplash.com/photo-1579326284859-6e1a4b741425?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjExMDY5OX0"
         )
     }
+
 }
