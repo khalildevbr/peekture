@@ -42,9 +42,12 @@ class PhotosListActivity : AppCompatActivity() {
     private fun loading(isLoading: Boolean) {
 
         if (isLoading) {
-            binding.progressBarGroup.visible()
+            binding.loadingAnimation.visible()
+            binding.loadingAnimation.playAnimation()
         } else {
-            binding.progressBarGroup.gone()
+            binding.loadingAnimation.gone()
+            binding.loadingAnimation.pauseAnimation()
+
         }
     }
 
