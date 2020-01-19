@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">peekture</string>
     <string name="loading_images">loading images…</string>
+    <string name="retry">Retry</string>
+    <string name="error_message">Ops! We get an error!\nSorry dude! Try again!</string>
 </resources>

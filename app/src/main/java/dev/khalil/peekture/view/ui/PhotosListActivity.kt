@@ -1,7 +1,6 @@
 package dev.khalil.peekture.view.ui
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -24,6 +23,8 @@ class PhotosListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPhotosBinding
     private val adapter by lazy { PhotosListAdapter() }
 
+    private var errorOnce = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
@@ -31,12 +32,20 @@ class PhotosListActivity : AppCompatActivity() {
 
         initRecyclerView()
         initObservers()
+        initListeners()
+    }
+
+    private fun initListeners() {
+        binding.errorLayout.retryButton.setOnClickListener {
+            viewModel.retry()
+            errorOnce = false
+        }
     }
 
     private fun initObservers() {
         viewModel.photos.observe(this, Observer { photos -> photosObserver(photos) })
         viewModel.loading.observe(this, Observer { isLoading -> loading(isLoading) })
-        viewModel.error.observe(this, Observer { error -> showError(error) })
+        viewModel.error.observe(this, Observer { hasError -> showError(hasError) })
     }
 
     private fun loading(isLoading: Boolean) {
@@ -57,11 +66,18 @@ class PhotosListActivity : AppCompatActivity() {
         binding.photosRecyclerView.adapter = adapter
     }
 
-    private fun showError(error: String) {
-        Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+    private fun showError(hasError: Boolean) {
+        if (hasError) {
+            binding.errorLayout.errorState.visible()
+            binding.photosRecyclerView.gone()
+        } else {
+            binding.errorLayout.errorState.gone()
+        }
     }
 
     private fun photosObserver(photos: List<PhotosUi>) {
+        binding.photosRecyclerView.visible()
         adapter.addPhotos(photos)
+        binding.errorLayout.errorState.gone()
     }
 }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/error_state"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/appCompatTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="3dp"
+            android:lines="2"
+            android:text="@string/error_message"
+            app:layout_constraintBottom_toTopOf="@+id/error_image_view"
+            app:layout_constraintEnd_toEndOf="@+id/error_image_view"
+            app:layout_constraintStart_toStartOf="@id/error_image_view"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/error_image_view"
+            android:layout_width="@dimen/error_placeholder_width"
+            android:layout_height="@dimen/error_placeholder_height"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toTopOf="@+id/retry_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appCompatTextView"
+            app:srcCompat="@drawable/error_placeholder" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/retry_button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/retry"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/error_image_view"
+            app:layout_constraintStart_toStartOf="@+id/error_image_view"
+            app:layout_constraintTop_toBottomOf="@+id/error_image_view" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

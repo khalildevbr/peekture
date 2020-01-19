@@ -20,8 +20,8 @@ class PhotosListViewModel @Inject constructor(private val repository: PhotosRepo
     private val loadingLiveData = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = loadingLiveData
 
-    private val errorLiveData = MutableLiveData<String>()
-    val error: LiveData<String> = errorLiveData
+    private val errorLiveData = MutableLiveData<Boolean>()
+    val error: LiveData<Boolean> = errorLiveData
 
     private val compositeDisposable = CompositeDisposable()
     private var actualPage = 1
@@ -30,15 +30,24 @@ class PhotosListViewModel @Inject constructor(private val repository: PhotosRepo
         getPhotos()
     }
 
+    fun retry() {
+        getPhotos()
+    }
+
     private fun getPhotos() {
         compositeDisposable.add(repository.getPhotos(actualPage)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe { loadingLiveData.value = true }
+            .doOnSubscribe { onSubscribe() }
             .doFinally { loadingLiveData.value = false }
             .subscribe({ responseList -> convertResponseToUiModel(responseList) },
-                { exception -> errorLiveData.value = exception.message })
+                { errorLiveData.value = true })
         )
+    }
+
+    private fun onSubscribe() {
+        loadingLiveData.value = true
+        errorLiveData.value = false
     }
 
     private fun convertResponseToUiModel(responseList: List<PhotosResponse>) {
