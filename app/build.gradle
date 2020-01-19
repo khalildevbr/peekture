@@ -21,7 +21,7 @@ android {
         debug {
             minifyEnabled false
             buildConfigField "String", "BASE_URL", "\"https://api.unsplash.com/\""
-            buildConfigField "String", "PHOTOS_ENDPOINT", "\"/photos@p\""
+            buildConfigField "String", "PHOTOS_ENDPOINT", "\"/photos\""
             buildConfigField "String", "API_KEY", "\"52ed5e63ad1915fed2bbfd2326aade6b8549b050fc8367a7c105567476df2a81\""
         }
 

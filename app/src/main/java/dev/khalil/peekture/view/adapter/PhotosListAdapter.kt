@@ -6,11 +6,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import dev.khalil.peekture.R
 import dev.khalil.peekture.databinding.PhotoListItemBinding
+import dev.khalil.peekture.model.PhotosUi
 import dev.khalil.peekture.view.holder.PhotosViewHolder
 
 class PhotosListAdapter : RecyclerView.Adapter<PhotosViewHolder>() {
 
-    private var photos: List<String> = arrayListOf()
+    private var photos: List<PhotosUi> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotosViewHolder {
         val view = DataBindingUtil.inflate<PhotoListItemBinding>(
@@ -29,7 +30,7 @@ class PhotosListAdapter : RecyclerView.Adapter<PhotosViewHolder>() {
         holder.bind(photos[position])
     }
 
-    fun addPhotos(photos: List<String>) {
+    fun addPhotos(photos: List<PhotosUi>) {
         this.photos = photos
         notifyDataSetChanged()
     }

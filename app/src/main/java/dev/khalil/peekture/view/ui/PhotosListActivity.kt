@@ -1,6 +1,7 @@
 package dev.khalil.peekture.view.ui
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import dagger.android.AndroidInjection
 import dev.khalil.peekture.R
 import dev.khalil.peekture.databinding.ActivityPhotosBinding
+import dev.khalil.peekture.model.PhotosUi
 import dev.khalil.peekture.view.adapter.PhotosListAdapter
 import dev.khalil.peekture.viewModel.PhotosListViewModel
 import javax.inject.Inject
@@ -31,15 +33,20 @@ class PhotosListActivity : AppCompatActivity() {
 
     private fun initObservers() {
         viewModel.photos.observe(this, Observer { photos -> photosObserver(photos) })
-    }
-
-    private fun photosObserver(photos: List<String>) {
-        adapter.addPhotos(photos)
+        viewModel.error.observe(this, Observer { error -> showError(error) })
     }
 
     private fun initRecyclerView() {
         binding.photosRecyclerView.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         binding.photosRecyclerView.adapter = adapter
+    }
+
+    private fun showError(error: String) {
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun photosObserver(photos: List<PhotosUi>) {
+        adapter.addPhotos(photos)
     }
 }
