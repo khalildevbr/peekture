@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import dagger.android.AndroidInjection
 import dev.khalil.peekture.R
 import dev.khalil.peekture.databinding.ActivityPhotosBinding
+import dev.khalil.peekture.extensions.gone
+import dev.khalil.peekture.extensions.visible
 import dev.khalil.peekture.model.PhotosUi
 import dev.khalil.peekture.view.adapter.PhotosListAdapter
 import dev.khalil.peekture.viewModel.PhotosListViewModel
@@ -33,7 +35,17 @@ class PhotosListActivity : AppCompatActivity() {
 
     private fun initObservers() {
         viewModel.photos.observe(this, Observer { photos -> photosObserver(photos) })
+        viewModel.loading.observe(this, Observer { isLoading -> loading(isLoading) })
         viewModel.error.observe(this, Observer { error -> showError(error) })
+    }
+
+    private fun loading(isLoading: Boolean) {
+
+        if (isLoading) {
+            binding.progressBarGroup.visible()
+        } else {
+            binding.progressBarGroup.gone()
+        }
     }
 
     private fun initRecyclerView() {

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">peekture</string>
+    <string name="loading_images">loading images…</string>
 </resources>
