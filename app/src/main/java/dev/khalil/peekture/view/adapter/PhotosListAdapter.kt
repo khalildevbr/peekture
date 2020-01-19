@@ -11,7 +11,7 @@ import dev.khalil.peekture.view.holder.PhotosViewHolder
 
 class PhotosListAdapter : RecyclerView.Adapter<PhotosViewHolder>() {
 
-    private var photos: List<PhotosUi> = arrayListOf()
+    private var photos: ArrayList<PhotosUi> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotosViewHolder {
         val view = DataBindingUtil.inflate<PhotoListItemBinding>(
@@ -31,7 +31,7 @@ class PhotosListAdapter : RecyclerView.Adapter<PhotosViewHolder>() {
     }
 
     fun addPhotos(photos: List<PhotosUi>) {
-        this.photos = photos
+        this.photos.addAll(photos)
         notifyDataSetChanged()
     }
 }

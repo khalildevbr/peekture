@@ -28,6 +28,14 @@ class PhotosListViewModel @Inject constructor(private val repository: PhotosRepo
 
     init {
         getPhotos()
+        loadingLiveData.value = true
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+
+        compositeDisposable.clear()
+        compositeDisposable.dispose()
     }
 
     fun retry() {
@@ -38,21 +46,27 @@ class PhotosListViewModel @Inject constructor(private val repository: PhotosRepo
         compositeDisposable.add(repository.getPhotos(actualPage)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe { onSubscribe() }
+            .doOnSubscribe { errorLiveData.value = false }
             .doFinally { loadingLiveData.value = false }
-            .subscribe({ responseList -> convertResponseToUiModel(responseList) },
+            .subscribe({ responseList ->
+                updateUi(responseList)
+            },
                 { errorLiveData.value = true })
         )
     }
 
-    private fun onSubscribe() {
-        loadingLiveData.value = true
-        errorLiveData.value = false
+    private fun updateUi(
+        responseList: List<PhotosResponse>) {
+        photosLiveData.value = convertResponseToUiModel(responseList)
     }
 
-    private fun convertResponseToUiModel(responseList: List<PhotosResponse>) {
-        photosLiveData.value = responseList.map { photoResponse ->
+    private fun convertResponseToUiModel(responseList: List<PhotosResponse>) =
+        responseList.map { photoResponse ->
             PhotosUi(photoResponse.urls.small)
         }
+
+    fun getMorePhotos() {
+        actualPage++
+        getPhotos()
     }
 }
