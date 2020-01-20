@@ -31,6 +31,12 @@ android {
         }
     }
 
+    sourceSets {
+        test {
+            resources.srcDirs += ["sampledata"]
+        }
+    }
+
     buildFeatures {
         dataBinding = true
     }

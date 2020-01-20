@@ -1,6 +1,8 @@
 package dev.khalil.peekture
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import dev.khalil.peekture.model.PhotosResponse
 import dev.khalil.peekture.repository.PhotosRepository
 import dev.khalil.peekture.viewModel.PhotosListViewModel
@@ -19,6 +21,8 @@ import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
+import java.lang.reflect.Type
+
 
 @RunWith(MockitoJUnitRunner::class)
 class PhotosListViewModelTest {
@@ -28,9 +32,6 @@ class PhotosListViewModelTest {
 
     @Mock
     private lateinit var mockRepository: PhotosRepository
-
-    @Mock
-    private lateinit var mockResponse: List<PhotosResponse>
 
     private lateinit var viewModel: PhotosListViewModel
 
@@ -53,11 +54,32 @@ class PhotosListViewModelTest {
     @Test
     fun `get Photos from Api`() {
         //given
-        Mockito.`when`(mockRepository.getPhotos(actualPage)).thenReturn(Single.just(mockResponse))
+        val response: List<PhotosResponse> = getMockResponse()
+        Mockito.`when`(mockRepository.getPhotos(actualPage)).thenReturn(Single.just(response))
         //when
         viewModel.getPhotos()
         //then
-        assertEquals(mockResponse.size, viewModel.photos.value?.size)
+        assertEquals(response.size, viewModel.photos.value?.size)
+    }
+
+    private fun getMockResponse(): List<PhotosResponse> {
+        val jsonObject = readFromFile("/response.json")
+        val listType: Type = object : TypeToken<ArrayList<PhotosResponse>>() {}.getType()
+        val list: List<PhotosResponse> = Gson().fromJson(jsonObject, listType)
+
+        return list
+    }
+
+
+    private fun readFromFile(filename: String): String {
+        val inputStream = javaClass.getResourceAsStream(filename)
+        val stringBuilder = StringBuilder()
+        var i: Int?
+        val b = ByteArray(4096)
+        while (inputStream?.read(b).also { i = it } != -1) {
+            stringBuilder.append(String(b, 0, i!!))
+        }
+        return stringBuilder.toString()
     }
 
     @After
