@@ -35,6 +35,11 @@ class PhotosListActivity : AppCompatActivity() {
         initRecyclerView()
         initObservers()
         initListeners()
+        initViewModel()
+    }
+
+    private fun initViewModel() {
+        viewModel.getPhotos()
     }
 
     private fun initListeners() {
@@ -89,7 +94,7 @@ class PhotosListActivity : AppCompatActivity() {
         layoutManager: StaggeredGridLayoutManager): EndlessRecyclerViewScrollListener {
         return object : EndlessRecyclerViewScrollListener(layoutManager) {
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView) {
-                viewModel.getMorePhotos()
+                viewModel.getPhotos()
             }
         }
     }

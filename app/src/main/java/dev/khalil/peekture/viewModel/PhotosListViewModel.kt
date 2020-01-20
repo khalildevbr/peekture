@@ -27,7 +27,6 @@ class PhotosListViewModel @Inject constructor(private val repository: PhotosRepo
     private var actualPage = 1
 
     init {
-        getPhotos()
         loadingLiveData.value = true
     }
 
@@ -42,7 +41,7 @@ class PhotosListViewModel @Inject constructor(private val repository: PhotosRepo
         getPhotos()
     }
 
-    private fun getPhotos() {
+    fun getPhotos() {
         compositeDisposable.add(repository.getPhotos(actualPage)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -50,6 +49,7 @@ class PhotosListViewModel @Inject constructor(private val repository: PhotosRepo
             .doFinally { loadingLiveData.value = false }
             .subscribe({ responseList ->
                 updateUi(responseList)
+                actualPage++
             },
                 { errorLiveData.value = true })
         )
@@ -64,9 +64,4 @@ class PhotosListViewModel @Inject constructor(private val repository: PhotosRepo
         responseList.map { photoResponse ->
             PhotosUi(photoResponse.urls.small)
         }
-
-    fun getMorePhotos() {
-        actualPage++
-        getPhotos()
-    }
 }
