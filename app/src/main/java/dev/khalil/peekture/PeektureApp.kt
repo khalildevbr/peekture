@@ -1,5 +1,6 @@
 package dev.khalil.peekture
 
+
 import android.app.Application
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
